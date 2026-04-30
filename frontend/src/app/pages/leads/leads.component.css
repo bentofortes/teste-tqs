@@ -1,0 +1,32 @@
+.container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: auto;
+  font-family: sans-serif;
+}
+
+.filters {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 12px;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+}

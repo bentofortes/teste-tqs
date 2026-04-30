@@ -70,7 +70,8 @@ public class LeadService(ILeadRepository leadRepository, ITaskRepository taskRep
         var lead = new Lead
         {
             Name = dto.Name,
-            Email = dto.Email
+            Email = dto.Email,
+            Status = dto.Status ?? LeadStatus.New
         };
 
         await _leadRepo.AddAsync(lead);

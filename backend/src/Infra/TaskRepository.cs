@@ -15,7 +15,7 @@ public class TaskRepository(AppDbContext context): ITaskRepository
 
     public async Task<(List<TaskItem> Items, int TotalCount)> GetPagedAsync(int leadId, int page, int pageSize)
     {
-        var query = _context.Tasks.AsQueryable();
+        var query = _context.Tasks.Where(t => t.LeadId == leadId).AsNoTracking();
 
         var totalCount = await query.CountAsync();
 

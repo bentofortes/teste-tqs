@@ -1,0 +1,55 @@
+<div class="container">
+
+  <a routerLink="/leads">← Back to Leads</a>
+
+  <p *ngIf="loading">Loading...</p>
+  <p *ngIf="error" class="error">{{ error }}</p>
+
+  <ng-container *ngIf="lead$ | async as lead">
+
+    <div *ngIf="lead">
+      <h2>{{ lead.name }}</h2>
+
+      <p><strong>Email:</strong> {{ lead.email }}</p>
+      <p><strong>Status:</strong> {{ getLeadStatusName(lead.status) }}</p>
+
+      <h3>Tasks</h3>
+
+      <button (click)="createTask()">+ Add Task</button>
+
+      <table *ngIf="lead.tasks.length > 0">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Due Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let task of lead.tasks">
+            <td>{{ task.title }}</td>
+
+            <td>
+              <select [(ngModel)]="task.status" (change)="updateTaskStatus(task)">
+                <option *ngFor="let s of taskStatuses" [ngValue]="s">
+                  {{ TaskStatus[s] }}
+                </option>
+              </select>
+            </td>
+
+            <td>{{ task.dueDate | date:'shortDate' }}</td>
+
+            <td>
+              <button (click)="deleteTask(task)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p *ngIf="!lead.tasks.length">No tasks for this lead.</p>
+    </div>
+
+  </ng-container>
+</div>

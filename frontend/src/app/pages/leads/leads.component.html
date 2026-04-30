@@ -1,0 +1,83 @@
+<div class="container">
+  <h2>Leads Dashboard</h2>
+
+  <!-- Filters -->
+  <div class="filters">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (keyup.enter)="loadLeads()"
+      placeholder="Search name or email..."
+    />
+
+    <select [(ngModel)]="statusFilter" (change)="loadLeads()">
+      <option [ngValue]="null">All Statuses</option>
+      <option [ngValue]="0">New</option>
+      <option [ngValue]="1">Contacted</option>
+      <option [ngValue]="2">Qualified</option>
+      <option [ngValue]="3">Lost</option>
+    </select>
+
+    <button (click)="loadLeads()">Search</button>
+    <button (click)="createLead()" class="create-btn">
+      + Create Lead
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <p *ngIf="loading">Loading...</p>
+
+  <!-- Error -->
+  <p *ngIf="error" style="color: red">{{ error }}</p>
+
+  <!-- Data -->
+  <ng-container *ngIf="leads$ | async as data">
+
+    <table *ngIf="data">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Status</th>
+          <th>Tasks</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let lead of data.items">
+          <td>{{ lead.name }}</td>
+          <td>{{ lead.email }}</td>
+          <td>{{ getStatusName(lead.status) }}</td>
+          <td>{{ lead.tasksCount }}</td>
+          <td>
+            <a [routerLink]="['/leads', lead.id]">View Details</a>
+            <button (click)="editLead(lead)">Edit</button>
+            <button (click)="deleteLead(lead)">Delete</button>
+          </td>
+        </tr>
+
+        <tr *ngIf="data.items.length === 0">
+          <td colspan="5">No leads found.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="data">
+      <button (click)="changePage(-1)" [disabled]="page === 1">
+        Prev
+      </button>
+
+      <span>Page {{ page }}</span>
+
+      <button
+        (click)="changePage(1)"
+        [disabled]="page * pageSize >= data.totalCount"
+      >
+        Next
+      </button>
+    </div>
+
+  </ng-container>
+</div>
